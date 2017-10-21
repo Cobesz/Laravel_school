@@ -8,6 +8,10 @@
                     <div class="content">
                         <h1>List of Games</h1>
                         <h2>Taken from the Steam API</h2>
+
+                        <?php
+                            echo $games;
+                        ?>
                     </div>
                 </div>
             </div>
