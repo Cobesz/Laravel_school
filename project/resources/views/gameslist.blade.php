@@ -9,9 +9,11 @@
                         <h1>List of Games</h1>
                         <h2>Taken from the Steam API</h2>
 
-                        <?php
+
+                        @php
                             echo $games;
-                        ?>
+                        @endphp
+
                     </div>
                 </div>
             </div>
