@@ -8,13 +8,11 @@ use GuzzleHttp\Client;
 class GamesListController extends Controller
 {
 
-    public function checkDuplicate($duplicateItems, $random2, $maxItems)
+    public function checkDuplicate($duplicateItems, $random2, $maxItems, &$items)
     {
-        //can't reach items otherwise
-        global $items;
         //update if needed
         $random = $random2;
-        while (in_array($random, $duplicateItems)){
+        while (in_array($random, $duplicateItems)) {
             $random = rand(0, $maxItems);
         }
         $duplicateItems[] = $random;
@@ -26,40 +24,38 @@ class GamesListController extends Controller
 
         $client = new Client();
 
-// Create a request
+        // Create a request
         $request = $client->get('http://api.steampowered.com/ISteamApps/GetAppList/v2/');
-// Get the actual response without headers
+        // Get the actual response without headers
         $response = $request->getBody();
 
         $json = json_decode($response);
 
-        //coutn all items in steam api
-        $maxItems = count($json->applist->apps);
+        $gameList = "";
 
+        //count all items in steam api
+        $maxItems = count($json->applist->apps);
         $duplicateItems = [];
 
         //make an array
-        global $items;
         $items = [];
 
         //select 6 random items out of all steam apps
         for ($i = 0; $i < 6; $i++) {
             $random = rand(0, $maxItems);
-            $this->checkDuplicate($duplicateItems, $random, $maxItems);
+            $this->checkDuplicate($duplicateItems, $random, $maxItems, $items);
         }
-
-        $gameList = "";
 
         //print result to the screen
         foreach ($items as $game) {
             $gameList .= $json->applist->apps[$game]->name . '<br/>';
         }
-
-
+        
         return view('gameslist')->with('games', $gameList);
     }
 
-    public function getGamesList() {
+    public function getGamesList()
+    {
 
     }
 
